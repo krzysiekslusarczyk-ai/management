@@ -1,0 +1,169 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMINISTRATOR
+  MANAGER
+  KIEROWNIK
+  MAGISTER
+  TECHNIK
+}
+
+enum ScheduleStatus {
+  DRAFT
+  PENDING_APPROVAL
+  APPROVED
+  PUBLISHED
+}
+
+enum ShiftType {
+  MORNING
+  AFTERNOON
+  NIGHT
+  FULL_DAY
+}
+
+enum AbsenceType {
+  VACATION
+  SICK_LEAVE
+  PERSONAL
+  OTHER
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  password      String
+  firstName     String
+  lastName      String
+  role          Role
+  phoneNumber   String?
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  pharmacies    UserPharmacy[]
+  shifts        Shift[]
+  absences      Absence[]
+  preferences   Preference[]
+  createdSchedules Schedule[] @relation("CreatedBy")
+  approvedSchedules Schedule[] @relation("ApprovedBy")
+
+  @@map("users")
+}
+
+model Pharmacy {
+  id          String   @id @default(uuid())
+  name        String
+  address     String
+  city        String
+  phoneNumber String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  users       UserPharmacy[]
+  schedules   Schedule[]
+
+  @@map("pharmacies")
+}
+
+model UserPharmacy {
+  id          String   @id @default(uuid())
+  userId      String
+  pharmacyId  String
+  assignedAt  DateTime @default(now())
+
+  // Relations
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pharmacy    Pharmacy @relation(fields: [pharmacyId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, pharmacyId])
+  @@map("user_pharmacies")
+}
+
+model Schedule {
+  id            String         @id @default(uuid())
+  pharmacyId    String
+  startDate     DateTime
+  endDate       DateTime
+  status        ScheduleStatus @default(DRAFT)
+  createdById   String
+  approvedById  String?
+  approvedAt    DateTime?
+  publishedAt   DateTime?
+  notes         String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  // Relations
+  pharmacy      Pharmacy @relation(fields: [pharmacyId], references: [id], onDelete: Cascade)
+  createdBy     User     @relation("CreatedBy", fields: [createdById], references: [id])
+  approvedBy    User?    @relation("ApprovedBy", fields: [approvedById], references: [id])
+  shifts        Shift[]
+
+  @@map("schedules")
+}
+
+model Shift {
+  id          String    @id @default(uuid())
+  scheduleId  String
+  userId      String
+  date        DateTime
+  shiftType   ShiftType
+  startTime   String    // Format: "HH:mm"
+  endTime     String    // Format: "HH:mm"
+  notes       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  schedule    Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("shifts")
+}
+
+model Absence {
+  id          String      @id @default(uuid())
+  userId      String
+  startDate   DateTime
+  endDate     DateTime
+  absenceType AbsenceType
+  reason      String?
+  isApproved  Boolean     @default(false)
+  approvedAt  DateTime?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  // Relations
+  user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("absences")
+}
+
+model Preference {
+  id            String   @id @default(uuid())
+  userId        String
+  preferredDays String[] // Array of day names: ["Monday", "Tuesday", ...]
+  preferredShiftTypes ShiftType[]
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  user          User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("preferences")
+}
