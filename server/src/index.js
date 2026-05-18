@@ -30,7 +30,12 @@ app.use('/api/shifts', shiftRoutes);
 app.use('/api/absences', absenceRoutes);
 app.use('/api/preferences', preferenceRoutes);
 
-// Error handling middleware
+// 404 handler - must come before error handler
+app.use((req, res) => {
+  res.status(404).json({ error: { message: 'Route not found' } });
+});
+
+// Error handling middleware - must be last
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(err.status || 500).json({
@@ -39,11 +44,6 @@ app.use((err, req, res, next) => {
       ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
     }
   });
-});
-
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({ error: { message: 'Route not found' } });
 });
 
 app.listen(PORT, () => {
