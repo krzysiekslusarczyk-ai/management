@@ -1,0 +1,88 @@
+.dashboard {
+  padding: 20px;
+}
+
+.dashboard h1 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.welcome-text {
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.empty-state {
+  color: #999;
+  text-align: center;
+  padding: 20px;
+  font-style: italic;
+}
+
+.schedule-list,
+.absence-list {
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.schedule-item,
+.absence-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.2s;
+}
+
+.schedule-item:hover {
+  background-color: #f8f9fa;
+  border-color: #007bff;
+}
+
+.schedule-dates,
+.absence-dates {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.quick-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.action-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  text-decoration: none;
+  color: #333;
+  transition: all 0.2s;
+}
+
+.action-button:hover {
+  background-color: #e9ecef;
+  border-color: #007bff;
+}
+
+.action-icon {
+  font-size: 24px;
+}

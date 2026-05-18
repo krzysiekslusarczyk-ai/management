@@ -1,0 +1,63 @@
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.calendar-day {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.day-header {
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.day-name {
+  font-weight: 600;
+  font-size: 13px;
+  color: #333;
+  text-transform: capitalize;
+}
+
+.day-date {
+  font-size: 12px;
+  color: #666;
+  margin-top: 2px;
+}
+
+.day-shifts {
+  padding: 10px;
+  min-height: 80px;
+}
+
+.shift-user {
+  font-weight: 500;
+  font-size: 12px;
+}
+
+.shift-time {
+  font-size: 11px;
+  color: #666;
+  margin-top: 2px;
+}
+
+.no-shifts {
+  color: #999;
+  font-size: 12px;
+  font-style: italic;
+  text-align: center;
+  padding: 20px 0;
+}

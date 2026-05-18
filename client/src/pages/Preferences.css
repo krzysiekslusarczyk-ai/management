@@ -1,0 +1,22 @@
+.preference-view {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.preference-section h3 {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.preference-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.preference-tags .badge {
+  font-size: 13px;
+  padding: 6px 12px;
+}
